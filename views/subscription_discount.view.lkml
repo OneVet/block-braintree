@@ -1,5 +1,5 @@
 view: subscription_discount {
-  sql_table_name: SUBSCRIPTION_DISCOUNT
+  sql_table_name: @{BRAINTREE_SCHEMA}.SUBSCRIPTION_DISCOUNT
     ;;
   drill_fields: [id]
 

@@ -1,5 +1,5 @@
 view: apple_pay_card{
-  sql_table_name: APPLE_PAY_CARD ;;
+  sql_table_name: @{BRAINTREE_SCHEMA}.APPLE_PAY_CARD ;;
 
   dimension: card_type {
     type: string

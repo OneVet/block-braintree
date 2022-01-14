@@ -538,11 +538,11 @@
     model: block_braintree_v2
     explore: transaction
     type: block-braintree::block-braintree-sankey
-    fields: [transaction.risk_data_decision, transaction.processor_authorization_type,
+    fields: [transaction.risk_data_decision, transaction.processor_response_type,
       transaction.status, transaction.count]
     filters:
       transaction.denied: 'Yes'
-      transaction.processor_authorization_type: "-Approved"
+      transaction.processor_response_type: "-Approved"
     sorts: [transaction.count desc]
     limit: 500
     column_limit: 50

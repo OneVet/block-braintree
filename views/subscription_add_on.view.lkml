@@ -1,5 +1,5 @@
 view: subscription_add_on {
-  sql_table_name: SUBSCRIPTION_ADD_ON
+  sql_table_name: @{BRAINTREE_SCHEMA}.SUBSCRIPTION_ADD_ON
     ;;
   drill_fields: [id]
 

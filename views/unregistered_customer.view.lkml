@@ -1,5 +1,5 @@
 view: unregistered_customer {
-  sql_table_name: UNREGISTERED_CUSTOMER
+  sql_table_name: @{BRAINTREE_SCHEMA}.UNREGISTERED_CUSTOMER
     ;;
   drill_fields: [id]
 

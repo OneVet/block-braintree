@@ -1,5 +1,5 @@
 view: paypal_details {
-  sql_table_name: PAYPAL_DETAILS ;;
+  sql_table_name: @{BRAINTREE_SCHEMA}.PAYPAL_DETAILS ;;
 
   dimension: authorization_id {
     type: number

@@ -1,5 +1,5 @@
 view: transaction_add_on {
-  sql_table_name: TRANSACTION_ADD_ON;;
+  sql_table_name: @{BRAINTREE_SCHEMA}.TRANSACTION_ADD_ON;;
   drill_fields: [id]
 
   dimension: id {

@@ -11,8 +11,8 @@
       "label": "Connection Name",
       "value_constraint": "connection"
     },
-    "DATASET_NAME": {
-      "label": "Braintree Dataset Name"
+    "BRAINTREE_SCHEMA": {
+      "label": "Braintree DB schema name"
     }
   },
   "models": [

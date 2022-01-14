@@ -1,5 +1,5 @@
 view: subscription_status_history {
-  sql_table_name: SUBSCRIPTION_STATUS_HISTORY
+  sql_table_name: @{BRAINTREE_SCHEMA}.SUBSCRIPTION_STATUS_HISTORY
     ;;
 
   dimension: balance {

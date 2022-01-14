@@ -1,5 +1,5 @@
 view: subscription {
-  sql_table_name: SUBSCRIPTION ;;
+  sql_table_name: @{BRAINTREE_SCHEMA}.SUBSCRIPTION ;;
   drill_fields: [id]
 
   dimension: id {

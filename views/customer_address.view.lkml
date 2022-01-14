@@ -1,5 +1,5 @@
 view: customer_address{
-  sql_table_name: CUSTOMER_ADDRESS
+  sql_table_name: @{BRAINTREE_SCHEMA}.CUSTOMER_ADDRESS
     ;;
   drill_fields: [id]
 

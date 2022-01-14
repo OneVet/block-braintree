@@ -1,5 +1,5 @@
 view: android_pay_details{
-  sql_table_name: ANDROID_PAY_DETAILS ;;
+  sql_table_name: @{BRAINTREE_SCHEMA}.ANDROID_PAY_DETAILS ;;
 
   dimension: bin {
     type: number

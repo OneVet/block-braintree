@@ -1,5 +1,5 @@
 view: transaction_discount {
-  sql_table_name: TRANSACTION_DISCOUNT
+  sql_table_name: @{BRAINTREE_SCHEMA}.TRANSACTION_DISCOUNT
     ;;
   drill_fields: [id]
 

@@ -8,7 +8,7 @@ constant: CONNECTION_NAME {
   export: override_optional
 }
 
-constant: DATASET_NAME {
-  value: "dataset"
+constant: SCHEMA {
+  value: "schema"
   export: override_optional
 }

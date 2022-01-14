@@ -1,5 +1,5 @@
 view: credit_card{
-  sql_table_name: CREDIT_CARD ;;
+  sql_table_name: @{BRAINTREE_SCHEMA}.CREDIT_CARD ;;
 
   dimension: address_company {
     type: string
@@ -71,7 +71,7 @@ view: credit_card{
   }
 
   dimension: commercial {
-    type: yesno
+    type: string
     sql: ${TABLE}.commercial ;;
     description: "Whether the card type is a commercial card and is capable of processing Level 2 transactions."
   }
@@ -105,20 +105,20 @@ view: credit_card{
     type: string
     sql: ${TABLE}.customer_location ;;
     description: "This is US if the billing address is in the US or if a country is not specified. The location is International if the billing country passed is not the US."
-    }
+  }
 
-    dimension: debit {
-    type: yesno
+  dimension: debit {
+    type: string
     sql: ${TABLE}.debit ;;
-    }
+  }
 
-    dimension: durbin_regulated {
-    type: yesno
+  dimension: durbin_regulated {
+    type: string
     sql: ${TABLE}.durbin_regulated ;;
     description: "A value indicating whether the issuing bank's card range is regulated by the Durbin Amendment due to the bank's assets."
-    }
+  }
 
-    dimension: expiration_month_raw {
+  dimension: expiration_month_raw {
     hidden: yes
     type: string
     group_label: "Credit Card Details"
@@ -138,14 +138,17 @@ view: credit_card{
     type: time
     timeframes: [raw, month, year]
     sql:
-    PARSE_TIMESTAMP(
-      "%F"
-      ,CONCAT(
-        IF(CHAR_LENGTH(${expiration_year_raw}) < 4, CONCAT("20",${expiration_year_raw}), ${expiration_year_raw})
-        ,"-", ${expiration_month_raw}
-        ,"-01"
+        TO_TIMESTAMP(
+       CONCAT(
+        CASE
+           WHEN CHAR_LENGTH(${expiration_year_raw}) < 4
+           THEN CONCAT('20',${expiration_year_raw})
+           ELSE ${expiration_year_raw}
+        END
+        ,'-', ${expiration_month_raw}
+        ,'-01'
       )
-    )
+    ,'YYYY-MM-DD')
       ;;
   }
 
@@ -157,7 +160,7 @@ view: credit_card{
   }
 
   dimension: healthcare {
-    type: yesno
+    type: string
     sql: ${TABLE}.healthcare ;;
     description: "Whether the card is a healthcare card."
   }
@@ -193,18 +196,18 @@ view: credit_card{
   dimension: last4 {
     type: number
     group_label: "Credit Card Details"
-    sql: ${TABLE}.last4 ;;
+    sql: ${TABLE}.last_4 ;;
     description: "The last 4 digits of the credit card number."
   }
 
   dimension: payroll {
-    type: yesno
+    type: string
     sql: ${TABLE}.payroll ;;
     description: "Whether the card is a payroll card. "
   }
 
   dimension: prepaid {
-    type: yesno
+    type: string
     sql: ${TABLE}.prepaid ;;
     description: "Whether the card is a prepaid card. "
   }

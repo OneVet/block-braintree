@@ -1,5 +1,5 @@
 view: dispute {
-  sql_table_name: DISPUTE ;;
+  sql_table_name: @{BRAINTREE_SCHEMA}.DISPUTE ;;
 
   dimension: amount {
     type: number
@@ -41,16 +41,16 @@ view: dispute {
   dimension: reason_display {
     type: string
     sql:
-    CASE WHEN ${reason} = "cancelled_recurring_transaction" THEN "Canceled Recurring Transaction"
-         WHEN ${reason} = "credit_not_processed" THEN "Credit Not Processed"
-         WHEN ${reason} = "duplicate" THEN "Duplicate"
-         WHEN ${reason} = "fraud" THEN "Fraud"
-         WHEN ${reason} = "general" THEN "General"
-         WHEN ${reason} = "invalid_account" THEN "Invalid Account"
-         WHEN ${reason} = "not_recognized" THEN "Not Recognized"
-         WHEN ${reason} = "product_not_received" THEN "Product Not Received"
-         WHEN ${reason} = "product_unsatisfactory" THEN "Product Unsatisfactory"
-         WHEN ${reason} = "transaction_amount_differs" THEN "Transaction Amount Differs"
+    CASE WHEN ${reason} = 'cancelled_recurring_transaction' THEN 'Canceled Recurring Transaction'
+         WHEN ${reason} = 'credit_not_processed' THEN 'Credit Not Processed'
+         WHEN ${reason} = 'duplicate' THEN 'Duplicate'
+         WHEN ${reason} = 'fraud' THEN 'Fraud'
+         WHEN ${reason} = 'general' THEN 'General'
+         WHEN ${reason} = 'invalid_account' THEN 'Invalid Account'
+         WHEN ${reason} = 'not_recognized' THEN 'Not Recognized'
+         WHEN ${reason} = 'product_not_received' THEN 'Product Not Received'
+         WHEN ${reason} = 'product_unsatisfactory' THEN 'Product Unsatisfactory'
+         WHEN ${reason} = 'transaction_amount_differs' THEN 'Transaction Amount Differs'
          ELSE NULL END
         ;;
   }
@@ -108,7 +108,8 @@ view: dispute {
   }
 
   measure: count {
-    type: count
+    type: count_distinct
+    sql: ${TABLE}.id ;;
     label: "Number of Disputes"
     drill_fields: [detail*]
   }

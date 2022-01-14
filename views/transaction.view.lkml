@@ -1,5 +1,5 @@
 view: transaction {
-  sql_table_name: TRANSACTION ;;
+  sql_table_name: @{BRAINTREE_SCHEMA}.TRANSACTION ;;
 
   dimension: refunded_transaction_id {
     type: number
@@ -100,7 +100,7 @@ view: transaction {
       date,
       month
     ]
-    sql: PARSE_TIMESTAMP("%F", ${TABLE}.disbursement_date) ;;
+    sql:  ${TABLE}.disbursement_date ;;
     description: "The date that the funds associated with this transaction were disbursed. This attribute is only available if you have an eligible merchant account."
   }
 
@@ -113,13 +113,13 @@ view: transaction {
   dimension: disbursement_settlement_amount {
     type: number
     group_label: "Disbursement"
-    sql: ${TABLE}.disbursement_settlementAmount ;;
+    sql: ${TABLE}.disbursement_settlement_amount ;;
   }
 
   dimension: disbursement_settlement_currency_exchange_rate {
     type: number
     group_label: "Disbursement"
-    sql: ${TABLE}.disbursement_settlementCurrencyExchangeRate ;;
+    sql: ${TABLE}.disbursement_settlement_currency_exchange_rate ;;
   }
 
   dimension: disbursement_settlement_currency_iso_code {
@@ -170,28 +170,35 @@ view: transaction {
 
   dimension: processor_authorization_code {
     group_label: "Processor Authorization"
-    type: number
+    type: string
     sql: ${TABLE}.processor_authorization_code ;;
     description: "The authorization code returned by the processor."
   }
+  dimension: processor_response_code {
+    group_label: "Processor Response"
+    type: number
+    sql: CAST( ${TABLE}.processor_response_code AS int ) ;;
+    value_format: "0000"
+    description: "The response code returned by the processor."
+  }
 
 #https://developers.braintreepayments.com/reference/general/processor-responses/authorization-responses
-  dimension: processor_authorization_type  {
-    group_label: "Processor Authorization"
+  dimension: processor_response_type  {
+    group_label: "Processor Response"
     case: {
       when: {
-        sql: ${processor_authorization_code} < 2000 ;;
+        sql: ${processor_response_code} < 2000 ;;
         label: "Approved"
       }
       when: {
-        sql: ${processor_authorization_code} IN (
+        sql: ${processor_response_code} IN (
                 2000,2001,2002,2003,
                 2016,2025,2026,2034,
                 2035,2038,2040,2042,
                 2046,2048,2057,2062,
                 2092,2099
               )
-              OR ${processor_authorization_code} >= 2101 AND ${processor_authorization_code} <= 3000
+              OR ${processor_response_code} >= 2101 AND ${processor_response_code} <= 3000
         ;;
         label: "Soft Decline"
       }
@@ -354,29 +361,53 @@ view: transaction {
     ]
   }
 
+#
+#  dimension: month_linker {
+#    label: "Created Month"
+#    description: "This helper dimension provides contextual links to other dashboards."
+#    type: string
+#    sql: ${created_month} ;;
+#    link: {
+#      label: "Drill into these Transactions"
+#      url: "/dashboards/708?Date={{ value | replace '-', '/' }} for 1 months"
+#    }
+#    link: {
+#      label: "Drill into Declines from this Month"
+#      url: "/dashboards/716?Date={{ value | replace '-', '/' }} for 1 months"
+#    }
+#    link: {
+#      label: "Drill into Disputes from this Month"
+#      url: "/dashboards/715?Date={{ value | replace '-', '/' }} for 1 months"
+#    }
+#    link: {
+#      label: "Drill into At Risk Payments from this Month"
+#      url: "/dashboards/716?Date={{ value | replace '-', '/' }} for 1 months"
+#    }
+#  }
+
+
   dimension: month_linker {
     label: "Created Month"
     description: "This helper dimension provides contextual links to other dashboards."
     type: string
-    sql: ${created_month} ;;
+    sql: REPLACE(${created_month},'-','/') ;;
     link: {
       label: "Drill into these Transactions"
-      url: "/dashboards/708?Date={{value | replace '-', '/'}} for 1 months"
+      url: "/dashboards/708?Date={{ value  }} for 1 months"
     }
     link: {
       label: "Drill into Declines from this Month"
-      url: "/dashboards/716?Date={{value | replace '-', '/'}} for 1 months"
+      url: "/dashboards/716?Date={{ value  }} for 1 months"
     }
     link: {
       label: "Drill into Disputes from this Month"
-      url: "/dashboards/715?Date={{value | replace '-', '/'}} for 1 months"
+      url: "/dashboards/715?Date={{ value  }} for 1 months"
     }
     link: {
       label: "Drill into At Risk Payments from this Month"
-      url: "/dashboards/716?Date={{value | replace '-', '/'}} for 1 months"
+      url: "/dashboards/716?Date={{ value  }} for 1 months"
     }
   }
-
   dimension_group: updated {
     type: time
     sql: ${TABLE}.updated_at ;;
@@ -411,7 +442,7 @@ view: transaction {
       fiscal_quarter_of_year,
       fiscal_year
     ]
-    sql: CURRENT_TIMESTAMP() ;;
+    sql: NOW() ;;
   }
 
   dimension: tender {
@@ -430,22 +461,22 @@ view: transaction {
   dimension: tender_display {
     type: string
     sql: CASE
-           WHEN ${transaction.payment_instrument_type} = "credit_card" THEN 'Credit Card'
-           WHEN ${transaction.payment_instrument_type} = "masterpass_card" THEN 'MasterPass card'
-           WHEN ${transaction.payment_instrument_type} = "paypal_here" THEN 'Paypal'
-           WHEN ${transaction.payment_instrument_type} = "paypal_account" THEN 'Paypal'
-           WHEN ${transaction.payment_instrument_type} = "venmo_account" THEN 'Venmo'
-           WHEN ${transaction.payment_instrument_type} = "visa_checkout_card" THEN 'Visa Checkout'
-           WHEN ${transaction.payment_instrument_type} = "apple_pay_card" THEN 'Apple Pay'
-           WHEN ${transaction.payment_instrument_type} = "android_pay_card" THEN 'Android Pay'
-           WHEN ${transaction.payment_instrument_type} = "samsung_pay_card" THEN 'Samsung Pay'
-           WHEN ${transaction.payment_instrument_type} = "us_bank_account" THEN 'US Bank'
+           WHEN ${transaction.payment_instrument_type} = 'credit_card' THEN 'Credit Card'
+           WHEN ${transaction.payment_instrument_type} = 'masterpass_card' THEN 'MasterPass card'
+           WHEN ${transaction.payment_instrument_type} = 'paypal_here' THEN 'Paypal'
+           WHEN ${transaction.payment_instrument_type} = 'paypal_account' THEN 'Paypal'
+           WHEN ${transaction.payment_instrument_type} = 'venmo_account' THEN 'Venmo'
+           WHEN ${transaction.payment_instrument_type} = 'visa_checkout_card' THEN 'Visa Checkout'
+           WHEN ${transaction.payment_instrument_type} = 'apple_pay_card' THEN 'Apple Pay'
+           WHEN ${transaction.payment_instrument_type} = 'android_pay_card' THEN 'Android Pay'
+           WHEN ${transaction.payment_instrument_type} = 'samsung_pay_card' THEN 'Samsung Pay'
+           WHEN ${transaction.payment_instrument_type} = 'us_bank_account' THEN 'US Bank'
           ELSE 'Other' END;;
   }
 
   dimension: denied {
     type: yesno
-    sql: ${status} IN ("SettlementDeclined","GatewayRejected","AuthorizationExpired","ProcessorDeclined","Failed") ;;
+    sql: ${status} IN ('SettlementDeclined','GatewayRejected','AuthorizationExpired','ProcessorDeclined','Failed') ;;
   }
 
   dimension: amount_formatted {

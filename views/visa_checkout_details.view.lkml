@@ -1,5 +1,5 @@
 view: visa_checkout_details {
-  sql_table_name: VISA_CHECKOUT_DETAILS ;;
+  sql_table_name: @{BRAINTREE_SCHEMA}.VISA_CHECKOUT_DETAILS ;;
 
   dimension: bin {
     type: number

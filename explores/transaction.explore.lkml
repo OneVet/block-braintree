@@ -21,6 +21,7 @@ explore: transaction {
   join: dispute {
     sql_on: ${transaction.id} = ${dispute.transaction_id} ;;
     relationship: one_to_one
+    type: left_outer
   }
   join: dispute_ndt {
     sql_on: ${dispute.reason_display} = ${dispute_ndt.reason_display} ;;

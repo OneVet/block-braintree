@@ -1,5 +1,5 @@
 view: merchant_account {
-  sql_table_name: MERCHANT_ACCOUNT ;;
+  sql_table_name: @{BRAINTREE_SCHEMA}.MERCHANT_ACCOUNT ;;
   drill_fields: [id]
 
   dimension: id {

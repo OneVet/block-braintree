@@ -1,5 +1,5 @@
 view: masterpass_card_details {
-  sql_table_name: MASTERPASS_CARD_DETAILS ;;
+  sql_table_name: @{BRAINTREE_SCHEMA}.MASTERPASS_CARD_DETAILS ;;
 
   dimension: bin {
     type: number

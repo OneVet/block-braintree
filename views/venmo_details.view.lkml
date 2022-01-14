@@ -1,5 +1,5 @@
 view: venmo_details {
-  sql_table_name: VENMO_DETAILS ;;
+  sql_table_name: @{BRAINTREE_SCHEMA}.VENMO_DETAILS ;;
 
   dimension: image_url {
     type: string

@@ -1,5 +1,5 @@
 view: transaction_status_history{
-  sql_table_name: TRANSACTION_STATUS_HISTORY
+  sql_table_name: @{BRAINTREE_SCHEMA}.TRANSACTION_STATUS_HISTORY
     ;;
 
   dimension: amount {
