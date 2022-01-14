@@ -8,7 +8,7 @@ constant: CONNECTION_NAME {
   export: override_optional
 }
 
-constant: SCHEMA {
-  value: "schema"
+constant: BRAINTREE_SCHEMA {
+  value: "braintree"
   export: override_optional
 }
